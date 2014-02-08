@@ -1,38 +1,58 @@
 dofile("ninja.lua")
 dofile("connection.lua")
-dofile("map.lua")
+--dofile("map.lua")
 
 local ninjas = {}
 local myninja
 local world
 local map
+local ground
 
 function love.load(arg)
+
+    local windowSize = 650
 
     connectionSetup(arg)
 
     -- Set up world
     love.physics.setMeter(64)
-    world = love.physics.newWorld(0, 0, true)
-    map = makeMap()
+    world = love.physics.newWorld(0, 9.81*64, true)
+    world:setCallbacks(beginContact, endContact)
+    
+--    map = makeMap(world)
+    ground = {}
+    ground.body = love.physics.newBody(world, windowSize/2, windowSize - 50/2)
+    ground.shape = love.physics.newRectangleShape(windowSize, 50)
+    ground.fixture = love.physics.newFixture(ground.body, ground.shape)
+    ground.fixture:setUserData("ground")
 
     local ninja = makeNinja(200, 200, world)
     ninja.id = ip
+    ninja.fixture:setUserData(ip)
     ninjas[ninja.id] = ninja
     myninja = ninjas[ip]
+
+    love.graphics.setBackgroundColor(104, 136, 248)
+    love.window.setMode(650, 650)
+
+--    connectToServer(myninja)
 end
 
 function love.update(dt)
+    connectionUpdate(dt, ninjas)
+    world:update(dt)
+
     -- ninja movement input
     for _, ninja in pairs(ninjas) do
         moveNinja(dt, ninja)
     end
-
-    world:update(dt)
-    connectionUpdate(dt, ninjas)
 end
 
 function love.draw()
+    love.graphics.setColor(72, 160, 14)
+    love.graphics.polygon("fill", ground.body:getWorldPoints(ground.shape:getPoints()))
+    love.graphics.setColor(255, 255, 255)
+
     for _, ninja in pairs(ninjas) do
         if ninja.dir == '' then
             ninja.anim.stand:draw(ninja.image, ninja.body:getX(), ninja.body:getY())
@@ -60,8 +80,34 @@ function love.keyreleased(key)
         myninja.pressed[key] = false
     end
     if isClient then
-        clientReleaseHandler(key)
+--        clientReleaseHandler(key)
     else
-        serverReleaseHandler(key)
+--        serverReleaseHandler(key)
     end
+end
+
+function beginContact(a, b, coll)
+    local ninja
+    if a:getUserData() == "ground" then
+        ninja = ninjas[b:getUserData()]
+    elseif b:getUserData() == "ground" then
+        ninja = ninjas[a:getUserData()]
+    else
+        return
+    end
+
+    ninja.touching = ground
+end
+
+function endContact(a, b, coll)
+    local ninja
+    if a:getUserData() == "ground" then
+        ninja = ninjas[b:getUserData()]
+    elseif b:getUserData() == "ground" then
+        ninja = ninjas[a:getUserData()]
+    else
+        return
+    end
+
+    ninja.touching = nil
 end
