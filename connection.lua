@@ -155,7 +155,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                 x=ninja.body:getX(), 
                 y=ninja.body:getY(), 
                 dir=ninja.dir, 
-                pressed=ninja.pressed, 
+                --pressed=ninja.pressed, 
                 jumptime=ninja.jumptime,
                 knives_thrown=ninja.knives_thrown}
             end
@@ -194,7 +194,7 @@ function serverPressHandler(key, ninjas)
 
     for _, ninja in pairs(ninjas) do
         if ninja.id ~= ip then
-            --udp:sendto(json.encode(formattedMessage), ninja.id, port)
+            udp:sendto(json.encode(formattedMessage), ninja.id, port)
         end
     end
 end
@@ -214,7 +214,7 @@ function serverReleaseHandler(key, ninjas)
 
     for _, ninja in pairs(ninjas) do
         if ninja.id ~= ip then
-            --udp:sendto(json.encode(formattedMessage), ninja.id, port)
+            udp:sendto(json.encode(formattedMessage), ninja.id, port)
         end
     end
 end
