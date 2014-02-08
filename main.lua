@@ -115,6 +115,15 @@ function beginContact(a, b, coll)
         knife = knives[adata]
         knife.fixture:destroy()
         knives[adata] = nil
+
+    elseif ninjas[adata] ~= nil and bdata == "los" then
+        if ninjas[adata].id ~= myid then
+            ninjas[adata].visible = true
+        end
+    elseif ninjas[bdata] ~= nil and adata == "los" then
+        if ninjas[bdata].id ~= myid then
+            ninjas[bdata].visible = true
+        end
     end
 
 end
@@ -127,5 +136,14 @@ function endContact(a, b, coll)
     elseif b:getUserData() == "floor" and ninjas[b:getUserData()] ~= nil then
         ninja = ninjas[a:getUserData()]
         ninja.touching = nil
+
+    elseif ninjas[adata] ~= nil and bdata == "los" then
+        if ninjas[adata].id ~= myid then
+            ninjas[adata].visible = false
+        end
+    elseif ninjas[bdata] ~= nil and adata == "los" then
+        if ninjas[bdata].id ~= myid then
+            ninjas[bdata].visible = false
+        end
     end
 end

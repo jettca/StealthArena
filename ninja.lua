@@ -26,11 +26,27 @@ function makeNinja(x, y, world, ip)
         touching = nil,
         jumptime = 0,
         maxjump = .2,
-        knives_thrown = 0
+        knives_thrown = 0,
+        visible = false,
+        los = {
+            length = 300,
+            height = 300
+        }
     }
     ninja.body = love.physics.newBody(world, x, y, 'dynamic')
     ninja.box = love.physics.newRectangleShape(frame_width, frame_height)
     ninja.fixture = love.physics.newFixture(ninja.body, ninja.box, 20)
+
+    ninja.los.body = love.physics.newBody(world, x, y, "dynamic")
+    ninja.los.body:setGravityScale(0)
+    ninja.los.body:setMass(0)
+    ninja.los.shape = love.physics.newPolygonShape(
+        x, y, x + ninja.los.length, y + ninja.los.height/2,
+        x + ninja.los.length, y - ninja.los.height/2
+    )
+    ninja.los.fixture = love.physics.newFixture(ninja.los.body, ninja.los.shape)
+    ninja.los.fixture:setSensor(true)
+    ninja.los.fixture:setUserData("los")
 
     ninja.id = ip
     ninja.fixture:setUserData(ip)
@@ -40,6 +56,7 @@ end
 
 function moveNinja(dt, ninja)
     vx, vy = ninja.body:getLinearVelocity()
+    nx, ny = ninja.body:getPosition()
     if ninja.pressed.up then
         if ninja.touching ~= nil and ninja.touching:getY() >= ninja.body:getY() then
             ninja.body:setLinearVelocity(vx, ninja.jump)
@@ -52,19 +69,33 @@ function moveNinja(dt, ninja)
         ninja.jumptime = 0
     end
     if ninja.pressed.right then
-        ninja.dir = 'right'
+        if ninja.dir == 'left' then
+            ninja.dir = 'right'
+            ninja.los.body:setAngle(0)
+        end
         ninja.anim.walkRight:update(dt)
         if vx < ninja.speed then
             ninja.body:applyForce(ninja.accel, 0)
         end
     elseif ninja.pressed.left then
-        ninja.dir = 'left'
+        if ninja.dir == 'right' then
+            ninja.dir = 'left'
+            ninja.los.body:setAngle(3.14)
+        end
         ninja.anim.walkLeft:update(dt)
         if vx > -ninja.speed then
             ninja.body:applyForce(-ninja.accel, 0)
         end
     else
         ninja.body:applyForce(-vx*ninja.decel, 0)
+    end
+
+    if ninja.dir == 'right' then
+        ninja.los.body:setX(ninja.body:getX() - ninja.los.length)
+        ninja.los.body:setY(ninja.body:getY() - ninja.los.height/2)
+    else
+        ninja.los.body:setX(ninja.body:getX() + ninja.los.length)
+        ninja.los.body:setY(ninja.body:getY() + ninja.los.height/2)
     end
 end
 
