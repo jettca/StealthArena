@@ -198,7 +198,7 @@ function serverPressHandler(key, ninjas)
 
     for _, ninja in pairs(ninjas) do
         if ninja.id ~= ip then
-            udp:sendto(json.encode(formattedMessage), ninja.id, port)
+            --udp:sendto(json.encode(formattedMessage), ninja.id, port)
         end
     end
 end
@@ -218,7 +218,7 @@ function serverReleaseHandler(key, ninjas)
 
     for _, ninja in pairs(ninjas) do
         if ninja.id ~= ip then
-            udp:sendto(json.encode(formattedMessage), ninja.id, port)
+            --udp:sendto(json.encode(formattedMessage), ninja.id, port)
         end
     end
 end
