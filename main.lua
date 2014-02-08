@@ -35,7 +35,9 @@ function love.load(arg)
     love.graphics.setBackgroundColor(104, 136, 248)
     love.window.setMode(650, 650)
 
-    connectToServer(myninja)
+    if(isClient) then
+        connectToServer(myninja)
+    end
 end
 
 function love.update(dt)
