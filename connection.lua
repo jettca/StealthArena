@@ -76,7 +76,9 @@ function connectionUpdate(dt, ninjas, knives, world)
                 end
 
             elseif formattedMessage.type == "keyPress" then
-                ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = true
+                if(ninjas[formattedMessage.data["id"]]) then
+                    ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = true
+                end
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
@@ -87,8 +89,10 @@ function connectionUpdate(dt, ninjas, knives, world)
                 end
 
             elseif formattedMessage.type == "keyRelease" then
-                ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = false
-
+                if(ninjas[formattedMessage.data["id"]]) then
+                    ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = false
+                end
+                
                 if isServer then
                     for _, ninja in pairs(ninjas) do
                         if ninja.id ~= formattedMessage.data["id"] and ninja.id ~= ip then
