@@ -40,7 +40,7 @@ function connectToServer(ninja)
     formattedMessage["type"] = "newConnection"
     formattedMessage["data"] = {id=ip, ninja=ninja}
 
-    udp:sendTo(json.encode(formattedMessage), serverIp, port)
+    udp:sendto(json.encode(formattedMessage), serverIp, port)
 
 end
 
