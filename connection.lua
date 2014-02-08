@@ -1,12 +1,12 @@
 require "json"
 local socket = require "socket"
 local udp = socket.udp()
-local port = 6500
-local data, msg_or_ip, port_or_nil, msg
+local port = 12345
 ip = nil
 serverIp = nil
 
 udp:settimeout(0)
+udp:setoption("broadcast", true)
 
 isClient = false
 isServer = false
@@ -109,7 +109,7 @@ function connectionUpdate(dt, ninjas, world)
         end
     else
         if(msg ~= "timeout") then
-            print(msg)
+            print(tostring(msg))
         end
     end
 
