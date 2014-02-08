@@ -24,7 +24,8 @@ function makeNinja(x, y, world)
         },
         touching = nil,
         jumptime = 0,
-        maxjump = .5
+        maxjump = .5,
+        knives = {}
     }
     ninja.body = love.physics.newBody(world, x, y, 'dynamic')
     ninja.box = love.physics.newRectangleShape(frame_width, frame_height)
@@ -62,4 +63,21 @@ function moveNinja(dt, ninja)
         ninja.dir = ''
         ninja.body:applyForce(-vx*ninja.decel, 0)
     end
+end
+
+function drawNinja(ninja)
+    drawX = ninja.body:getX() - frame_width/2
+    drawY = ninja.body:getY() - frame_height/2
+    if ninja.dir == '' then
+        ninja.anim.stand:draw(ninja.image, drawX, drawY)
+    elseif ninja.dir == 'left' then
+        ninja.anim.walkLeft:draw(ninja.image, drawX, drawY)
+    elseif ninja.dir == 'right' then
+        ninja.anim.walkRight:draw(ninja.image, drawX, drawY)
+    end
+end
+
+function throwKnife(world, ninja)
+    local knife = {}
+    knife.body = love.physics.newBody(world, ninja.body:getX(), ninja.body:getY())
 end

@@ -34,12 +34,11 @@ function love.load(arg)
 
     love.graphics.setBackgroundColor(104, 136, 248)
     love.window.setMode(windowX, windowY)
+    camera:set()
 
     if(isClient) then
         connectToServer(myninja)
     end
-
-    camera:set()
 end
 
 function love.update(dt)
@@ -62,15 +61,7 @@ function love.draw()
     love.graphics.setColor(255, 255, 255)
 
     for _, ninja in pairs(ninjas) do
-        drawX = ninja.body:getX() - frame_width/2
-        drawY = ninja.body:getY() - frame_height/2
-        if ninja.dir == '' then
-            ninja.anim.stand:draw(ninja.image, drawX, drawY)
-        elseif ninja.dir == 'left' then
-            ninja.anim.walkLeft:draw(ninja.image, drawX, drawY)
-        elseif ninja.dir == 'right' then
-            ninja.anim.walkRight:draw(ninja.image, drawX, drawY)
-        end
+        drawNinja(ninja)
     end
 end
 
