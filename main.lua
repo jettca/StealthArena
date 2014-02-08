@@ -51,6 +51,7 @@ function love.update(dt)
 end
 
 function love.draw()
+    love.graphics.translate(-100, -300)
     love.graphics.setColor(72, 160, 14)
     love.graphics.polygon("fill", ground.body:getWorldPoints(ground.shape:getPoints()))
     love.graphics.setColor(255, 255, 255)
