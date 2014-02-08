@@ -1,7 +1,7 @@
 love = /Applications/love.app/Contents/MacOS/love
 
-game.love: *.lua *.png
-	zip -r game.love *.lua *.png
+game.love: *.lua *.png *.json
+	zip -r game.love *.lua *.png *.json
 
 .PHONY: clean
 clean:

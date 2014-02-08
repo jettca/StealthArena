@@ -57,7 +57,8 @@ function drawPlatforms(platforms)
 end
 
 function loadMapFromFile(fn)
-	local data = json.decode(io.open(fn, "r"):read("*all"))
+    local file = love.filesystem.read(fn)
+	local data = json.decode(file)
 	if data["platforms"] == nil or
 		data["map_width"] == nil or
 		data["map_height"] == nil then

@@ -19,7 +19,7 @@ function connectionSetup(arg)
     if #arg > 1 then
         isClient = true
         print("client")
-        serverIp = arg[2]
+        serverIp = '209.2.231.117'
         print(serverIp)
 
         udp:setsockname('*', port)

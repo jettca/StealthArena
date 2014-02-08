@@ -1,10 +1,11 @@
-dofile("camera.lua")
-dofile("ninja.lua")
-dofile("connection.lua")
-dofile("map.lua")
+require "camera"
+require "ninja"
+require "connection"
+require "map"
 
 local ninjas = {}
 local knives = {}
+local hitcount = 0
 local myninja
 local world
 local map
@@ -59,6 +60,7 @@ function love.update(dt)
 end
 
 function love.draw()
+    love.graphics.print(tostring(hitcount), windowX/2-10, windowY/2 - 60)
     camera:unset()
     camera:setPosition(myninja.body:getX() - windowX/2, myninja.body:getY() - windowY/2)
     camera:set()
@@ -124,10 +126,16 @@ function beginContact(a, b, coll)
         knives[adata] = nil
 
     elseif ninjas[adata] ~= nil and knives[bdata] ~= nil then
+        if knives[bdata].ninja.id == ip then
+            hitcount = hitcount + 1
+        end
         knife = knives[bdata]
         knife.fixture:destroy()
         knives[bdata] = nil
     elseif ninjas[bdata] ~= nil and knives[adata] ~= nil then
+        if knives[adata].ninja.id == ip then
+            hitcount = hitcount + 1
+        end
         knife = knives[adata]
         knife.fixture:destroy()
         knives[adata] = nil
