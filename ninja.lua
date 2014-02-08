@@ -33,7 +33,6 @@ function makeNinja(x, y, world, ip)
 
     ninja.id = ip
     ninja.fixture:setUserData(ip)
-    ninjas[ninja.id] = ninja
 
     return ninja
 end
