@@ -32,7 +32,7 @@ function connectionSetup(arg)
 
     local client = socket.connect( "www.google.com", 80 )
     ip, _ = client:getsockname()
-    -- ip, _ = socket.dns.toip(socket.dns.gethostname())
+
     print(ip)
 end
 
@@ -92,12 +92,18 @@ function connectionUpdate(dt, ninjas, world)
                     end
                 end
 
-            elseif formattedMessage.type == "worldUpdate" and isClient then
+            elseif isClient and formattedMessage.type == "worldUpdate" then
 
                 for _, ninja in pairs(formattedMessage.data) do
-                    local localNinja = ninjas[ninja.id]
-                    localNinja.body:setX(ninja.x)
-                    localNinja.body:setY(ninja.y)
+                    if ninjas[ninja.id] == nil then
+                        local newNinja = makeNinja(ninja.x, ninja.y, world, ninja.id)
+                        ninjas[ninja.id] = newNinja
+                    end
+                    else
+                        local localNinja = ninjas[ninja.id]
+                        localNinja.body:setX(ninja.x)
+                        localNinja.body:setY(ninja.y)
+                    end
                 end
 
             end
