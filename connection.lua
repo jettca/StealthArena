@@ -98,7 +98,6 @@ function connectionUpdate(dt, ninjas, world)
                     if ninjas[ninja.id] == nil then
                         local newNinja = makeNinja(ninja.x, ninja.y, world, ninja.id)
                         ninjas[ninja.id] = newNinja
-                    end
                     else
                         local localNinja = ninjas[ninja.id]
                         localNinja.body:setX(ninja.x)
