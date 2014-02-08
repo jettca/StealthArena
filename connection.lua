@@ -107,7 +107,9 @@ function connectionUpdate(dt, ninjas, world)
 
         end
     else
-        print(msg)
+        if(msg ~= "timeout") then
+            print(msg)
+        end
     end
 
 
