@@ -30,7 +30,7 @@ function makeNinja(x, y, world, ip)
         visible = false,
         los = {
             length = 300,
-            height = 300
+            height = 500
         }
     }
     ninja.body = love.physics.newBody(world, x, y, 'dynamic')
@@ -41,8 +41,8 @@ function makeNinja(x, y, world, ip)
     ninja.los.body:setGravityScale(0)
     ninja.los.body:setMass(0)
     ninja.los.shape = love.physics.newPolygonShape(
-        x, y, x + ninja.los.length, y + ninja.los.height/2,
-        x + ninja.los.length, y - ninja.los.height/2
+        0, 0, ninja.los.length, ninja.los.height/2,
+        ninja.los.length, -ninja.los.height/2
     )
     ninja.los.fixture = love.physics.newFixture(ninja.los.body, ninja.los.shape)
     ninja.los.fixture:setSensor(true)
@@ -91,11 +91,11 @@ function moveNinja(dt, ninja)
     end
 
     if ninja.dir == 'right' then
-        ninja.los.body:setX(ninja.body:getX() - ninja.los.length)
-        ninja.los.body:setY(ninja.body:getY() - ninja.los.height/2)
+        ninja.los.body:setX(ninja.body:getX())
+        ninja.los.body:setY(ninja.body:getY())
     else
-        ninja.los.body:setX(ninja.body:getX() + ninja.los.length)
-        ninja.los.body:setY(ninja.body:getY() + ninja.los.height/2)
+        ninja.los.body:setX(ninja.body:getX())
+        ninja.los.body:setY(ninja.body:getY())
     end
 end
 

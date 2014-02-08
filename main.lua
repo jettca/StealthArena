@@ -54,8 +54,11 @@ function love.draw()
     drawWalls(map.walls)
     drawPlatforms(map.platforms)
 
+
     for _, ninja in pairs(ninjas) do
-        drawNinja(ninja)
+        if ninja.visible then
+            drawNinja(ninja)
+        end
     end
 
     for _, knife in pairs(knives) do
@@ -91,6 +94,7 @@ function beginContact(a, b, coll)
     local ninja
     local adata = a:getUserData()
     local bdata = b:getUserData()
+
     if adata == "floor" and ninjas[bdata] ~= nil then
         ninja = ninjas[bdata]
         ninja.touching = a:getBody()
@@ -117,19 +121,17 @@ function beginContact(a, b, coll)
         knives[adata] = nil
 
     elseif ninjas[adata] ~= nil and bdata == "los" then
-        if ninjas[adata].id ~= myid then
-            ninjas[adata].visible = true
-        end
+        ninjas[adata].visible = true
     elseif ninjas[bdata] ~= nil and adata == "los" then
-        if ninjas[bdata].id ~= myid then
-            ninjas[bdata].visible = true
-        end
+        ninjas[bdata].visible = true
     end
 
 end
 
 function endContact(a, b, coll)
     local ninja
+    local adata = a:getUserData()
+    local bdata = b:getUserData()
     if a:getUserData() == "floor" and ninjas[b:getUserData()] ~= nil then
         ninja = ninjas[b:getUserData()]
         ninja.touching = nil
@@ -138,12 +140,8 @@ function endContact(a, b, coll)
         ninja.touching = nil
 
     elseif ninjas[adata] ~= nil and bdata == "los" then
-        if ninjas[adata].id ~= myid then
-            ninjas[adata].visible = false
-        end
+        ninjas[adata].visible = false
     elseif ninjas[bdata] ~= nil and adata == "los" then
-        if ninjas[bdata].id ~= myid then
-            ninjas[bdata].visible = false
-        end
+        ninjas[bdata].visible = false
     end
 end
