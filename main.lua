@@ -41,7 +41,7 @@ function love.load(arg)
 end
 
 function love.update(dt)
-    connectionUpdate(dt, ninjas)
+    connectionUpdate(dt, ninjas, world)
     world:update(dt)
 
     -- ninja movement input

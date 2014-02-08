@@ -39,46 +39,63 @@ function connectToServer(ninja)
     formattedMessage["type"] = "newConnection"
     formattedMessage["data"] = {id=ip, ninja=ninja}
 
-    udp:sendto(json.encode(formattedMessage), serverIp, port)
+    udp:send(json.encode(formattedMessage))
 
 end
 
-function connectionUpdate(dt, ninjas)
+function connectionUpdate(dt, ninjas, world)
 
     local rawMessage, msg = udp:receive()
 
     if rawMessage then
+
+        print(rawMessage)
+
         local formattedMessage = json.decode(rawMessage)
-    
-        if formattedMessage.type == "newConnection" then
-            ninjas[formattedMessage.data["id"]] = formattedMessage.data["ninja"]
+        if formattedMessage ~= nil then
 
-            if isServer then
-                for _, ninja in pairs(ninjas) do
-                    udp:sendto(rawMessage, ninja.id, port)
+            if formattedMessage.type == "newConnection" then
+                
+                local newNinja = makeNinja(200, 200, world)
+                newNinja.id = formattedMessage.data["id"]
+                newNinja.fixture:setUserData(ip)
+                
+                ninjas[formattedMessage.data["id"]] = newNinja
+
+                if isServer then
+                    for _, ninja in pairs(ninjas) do
+                        if ninja.id ~= formattedMessage.data["id"] then
+                            udp:sendto(rawMessage, ninja.id, port)
+                        end
+                    end
                 end
-            end
 
-        elseif formattedMessage.type == "keyPress" then
-            ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = true
+            elseif formattedMessage.type == "keyPress" then
+                ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = true
 
-            if isServer then
-                for _, ninja in pairs(ninjas) do
-                    udp:sendto(rawMessage, ninja.id, port)
+                if isServer then
+                    for _, ninja in pairs(ninjas) do
+                        if ninja.id ~= formattedMessage.data["id"] then
+                            udp:sendto(rawMessage, ninja.id, port)
+                        end
+                    end
                 end
-            end
 
-        elseif formattedMessage.type == "keyRelease" then
-            ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = false
+            elseif formattedMessage.type == "keyRelease" then
+                ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = false
 
-            if isServer then
-                for _, ninja in pairs(ninjas) do
-                    udp:sendto(rawMessage, ninja.id, port)
+                if isServer then
+                    for _, ninja in pairs(ninjas) do
+                        if ninja.id ~= formattedMessage.data["id"] then
+                            udp:sendto(rawMessage, ninja.id, port)
+                        end
+                    end
                 end
-            end
 
-        elseif formattedMessage.type == "worldUpdate" and isClient then
-            ninjas = formattedMessage.data["ninjas"]
+            elseif formattedMessage.type == "worldUpdate" and isClient then
+                --ninjas = formattedMessage.data["ninjas"]
+
+            end
 
         end
     end
@@ -96,7 +113,9 @@ function connectionUpdate(dt, ninjas)
             formattedMessage["data"] = ninjas
         
             for _, ninja in pairs(ninjas) do
-                udp:sendto(json.encode(formattedMessage), ninja.id, port)
+                if ninja.id ~= ip then
+                    udp:sendto(json.encode(formattedMessage), ninja.id, port)
+                end
             end
 
         end
@@ -109,7 +128,7 @@ function clientPressHandler(key)
     formattedMessage["type"] = "keyPress"
     formattedMessage["data"] = {id=ip, key=key}
 
-    udp:sendTo(json.encode(message), serverIp, port)
+    udp:send(json.encode(formattedMessage))
 end
 
 function serverPressHandler(key, ninjas)
@@ -129,7 +148,7 @@ function clientReleaseHandler(key)
     formattedMessage["type"] = "keyRelease"
     formattedMessage["data"] = {id=ip, key=key}
 
-    udp:sendTo(json.encode(message), serverIp, port)
+    udp:send(json.encode(formattedMessage))
 end
 
 function serverReleaseHandler(key, ninjas)
