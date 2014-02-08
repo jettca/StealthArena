@@ -16,7 +16,7 @@ function love.load(arg)
 
     -- Set up world
     love.physics.setMeter(64)
-    world = love.physics.newWorld(0, 9.81*64, true)
+    world = love.physics.newWorld(0, 40*64, true)
     world:setCallbacks(beginContact, endContact)
     
 --    map = makeMap(world)

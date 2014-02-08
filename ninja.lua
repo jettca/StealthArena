@@ -15,7 +15,7 @@ function makeNinja(x, y, world, ip)
         speed = 400,
         accel = 50000,
         decel = 500,
-        jump = -400,
+        jump = -600,
         dir = '',
         pressed = {
             left = false,
@@ -24,7 +24,7 @@ function makeNinja(x, y, world, ip)
         },
         touching = nil,
         jumptime = 0,
-        maxjump = .5,
+        maxjump = .2,
         knives = {}
     }
     ninja.body = love.physics.newBody(world, x, y, 'dynamic')
@@ -40,6 +40,7 @@ end
 function moveNinja(dt, ninja)
     vx, vy = ninja.body:getLinearVelocity()
     if ninja.pressed.up then
+        print(ninja.jumptime)
         if ninja.touching ~= nil and ninja.touching.body:getY() >= ninja.body:getY() then
             ninja.body:setLinearVelocity(vx, ninja.jump)
             ninja.jumptime = ninja.maxjump
