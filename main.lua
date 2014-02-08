@@ -77,22 +77,24 @@ end
 function love.keypressed(key)
     if myninja.pressed[key] ~= nil then
         myninja.pressed[key] = true
-    end
-    if isClient then
-        clientPressHandler(key)
-    else
-        serverPressHandler(key, ninjas)
+
+        if isClient then
+            clientPressHandler(key)
+        else
+            serverPressHandler(key, ninjas)
+        end
     end
 end
 
 function love.keyreleased(key)
     if myninja.pressed[key] ~= nil then
         myninja.pressed[key] = false
-    end
-    if isClient then
-        clientReleaseHandler(key)
-    else
-        serverReleaseHandler(key, ninjas)
+
+        if isClient then
+            clientReleaseHandler(key)
+        else
+            serverReleaseHandler(key, ninjas)
+        end
     end
 end
 

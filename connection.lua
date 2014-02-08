@@ -49,10 +49,10 @@ function connectionUpdate(dt, ninjas, world)
 
     if rawMessage then
 
-        print(rawMessage)
-
         local formattedMessage = json.decode(rawMessage)
         if formattedMessage ~= nil then
+
+            print(formattedMessage.type)
 
             if formattedMessage.type == "newConnection" then
                 
@@ -93,7 +93,12 @@ function connectionUpdate(dt, ninjas, world)
                 end
 
             elseif formattedMessage.type == "worldUpdate" and isClient then
-                --ninjas = formattedMessage.data["ninjas"]
+                
+                for _, ninja in pairs(formattedMessage.data) do
+                    local localNinja = ninjas[ninja.id]
+                    localNinja.body:setX(ninja.x)
+                    localNinja.body:setY(ninja.y)
+                end
 
             end
 
@@ -110,7 +115,10 @@ function connectionUpdate(dt, ninjas, world)
 
             local formattedMessage = {}
             formattedMessage["type"] = "worldUpdate"
-            formattedMessage["data"] = ninjas
+            formattedMessage["data"] = {}
+            for _, ninja in pairs(ninjas) do
+                formattedMessage.data[ninja.id] = {id=ninja.id, x=ninja.body:getX(), y=ninja.body:getY()}
+            end
         
             for _, ninja in pairs(ninjas) do
                 if ninja.id ~= ip then
