@@ -23,10 +23,10 @@ function makeMap(world)
 		table.insert(map.platforms, platform)
 	end
 	map.walls = {
-		top = makeObject(world, map.width/2, wall_size/2, map.width, wall_size),
+		top = makeObject(world, map.width/2, wall_size/2, map.width, wall_size, "wall"),
 		bottom = makeObject(world, map.width/2, map.height - wall_size/2, map.width, wall_size, "floor"),
-		left = makeObject(world, wall_size/2, map.height/2, wall_size, map.height - 2*wall_size),
-		right = makeObject(world, map.width - wall_size/2, map.height/2, wall_size, map.height - 2*wall_size)
+		left = makeObject(world, wall_size/2, map.height/2, wall_size, map.height - 2*wall_size, "wall"),
+		right = makeObject(world, map.width - wall_size/2, map.height/2, wall_size, map.height - 2*wall_size, "wall")
 	}
 	return map
 end

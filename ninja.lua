@@ -100,13 +100,14 @@ function makeKnife(world, ninja)
     knife.body = love.physics.newBody(world, ninja.body:getX(), ninja.body:getY(), "dynamic")
     knife.shape = love.physics.newCircleShape(knife.radius)
     knife.fixture = love.physics.newFixture(knife.body, knife.shape)
+    knife.fixture:setUserData(knife.id)
 
     if ninja.dir == "right" then
         knife.body:setLinearVelocity(knife.speed, 0)
         knife.body:setX(ninja.body:getX() + frame_width)
     else
         knife.body:setLinearVelocity(-knife.speed, 0)
-        knife.body:getX(ninja.body:getX() - frame_width)
+        knife.body:setX(ninja.body:getX() - frame_width)
     end
 
     return knife

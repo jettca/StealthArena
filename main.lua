@@ -89,21 +89,42 @@ end
 
 function beginContact(a, b, coll)
     local ninja
-    if a:getUserData() == "floor" and b:getUserData() ~= nil then
-        ninja = ninjas[b:getUserData()]
+    local adata = a:getUserData()
+    local bdata = b:getUserData()
+    if adata == "floor" and ninjas[bdata] ~= nil then
+        ninja = ninjas[bdata]
         ninja.touching = a:getBody()
-    elseif b:getUserData() == "floor" and b:getUserData() ~= nil then
-        ninja = ninjas[a:getUserData()]
+    elseif b:getUserData() == "floor" and ninjas[adata] ~= nil then
+        ninja = ninjas[adata]
         ninja.touching = b:getBody()
+
+    elseif (adata == "floor" or adata == "wall") and knives[bdata] ~= nil then
+        knife = knives[bdata]
+        knife.fixture:destroy()
+        knives[bdata] = nil
+    elseif (bdata == "floor" or bdata == "wall") and knives[adata] ~= nil then
+        knife = knives[adata]
+        knife.fixture:destroy()
+        knives[adata] = nil
+
+    elseif ninjas[adata] ~= nil and knives[bdata] ~= nil then
+        knife = knives[bdata]
+        knife.fixture:destroy()
+        knives[bdata] = nil
+    elseif ninjas[bdata] ~= nil and knives[adata] ~= nil then
+        knife = knives[adata]
+        knife.fixture:destroy()
+        knives[adata] = nil
     end
+
 end
 
 function endContact(a, b, coll)
     local ninja
-    if a:getUserData() == "floor" and b:getUserData() ~= nil then
+    if a:getUserData() == "floor" and ninjas[b:getUserData()] ~= nil then
         ninja = ninjas[b:getUserData()]
         ninja.touching = nil
-    elseif b:getUserData() == "floor" and b:getUserData() ~= nil then
+    elseif b:getUserData() == "floor" and ninjas[b:getUserData()] ~= nil then
         ninja = ninjas[a:getUserData()]
         ninja.touching = nil
     end
