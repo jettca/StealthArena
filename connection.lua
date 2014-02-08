@@ -21,7 +21,6 @@ function connectionSetup(arg)
         print("client")
         serverIp = arg[2]
         print(serverIp)
-        udp:setpeername(serverIp, port)
 
     else
         isServer = true
@@ -47,9 +46,16 @@ end
 
 function connectionUpdate(dt, ninjas, world)
 
-    local rawMessage, msg = udp:receive()
+    local rawMessage, msg, receiveIp, receivePort
+    if isServer then
+        rawMessage, msg = udp:receive()
+    else
+        rawMessage, msg, receiveIp, receivePort = udp:receivefrom()
+    end
+
 
     if rawMessage then
+        print(rawMessage)
 
         local formattedMessage = json.decode(rawMessage)
         if formattedMessage ~= nil then
