@@ -1,7 +1,7 @@
 dofile("camera.lua")
 dofile("ninja.lua")
 dofile("connection.lua")
---dofile("map.lua")
+dofile("map.lua")
 
 local ninjas = {}
 local myninja
@@ -18,8 +18,8 @@ function love.load(arg)
     love.physics.setMeter(64)
     world = love.physics.newWorld(0, 40*64, true)
     world:setCallbacks(beginContact, endContact)
-    
---    map = makeMap(world)
+
+    map = makeMap(world)
     ground = {}
     ground.body = love.physics.newBody(world, windowX/2, windowY - 50/2)
     ground.shape = love.physics.newRectangleShape(windowX, 50)
@@ -53,6 +53,9 @@ function love.draw()
     camera:unset()
     camera:setPosition(myninja.body:getX() - windowX/2, myninja.body:getY() - windowY/2)
     camera:set()
+
+    drawWalls(map.walls)
+    drawPlatforms(map.platforms)
 
     love.graphics.setColor(72, 160, 14)
     love.graphics.polygon("fill", ground.body:getWorldPoints(ground.shape:getPoints()))

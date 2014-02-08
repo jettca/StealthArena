@@ -1,30 +1,33 @@
 local json = require "json"
 local filename = "map.json"
-local wall_width
+local wall_width = 5
 
 function makeMap(world)
 	local map_data = loadMapFromFile(filename)
-	local platforms_data = map_data["platforms"]
 	local map = {
-		height = map_data["height"],
-		width = map_data["width"],
+		height = map_data["map_height"],
+		width = map_data["map_width"],
 		platforms = {},
 		walls = {}
 	}
-	for index in 1, table.getn(platforms) do
-		map.platforms[index] = {}
-		map.platforms[index] = makeObject(
-			map.platforms[index].w,
-			map.platforms[index].h,
-			map.platforms[index].x + plat_w/2,
-			map.platforms[index].y + plat_h/2
+	print(map.height)
+	print(map.width)
+	print(table.getn(map_data["platforms"]))
+	for _, p in ipairs(map_data["platforms"]) do
+		platform = {}
+		platform = makeObject(
+			world,
+			p.w,
+			p.h,
+			p.x + p.w/2,
+			p.y + p.h/2
 		)
 	end
 	map.walls = {
 		top = makeObject(world, map.width/2, wall_width/2, map.width, wall_width),
 		bottom = makeObject(world, map.width/2, map.height - wall_width/2, map.width, wall_width),
 		left = makeObject(world, wall_width/2, map.height/2, map.height - 2*wall_width),
-		right = makeObject(world, width - wall_width/2, map.height/2, wall_width, map.height - 2*wall_width),
+		right = makeObject(world, map.width - wall_width/2, map.height/2, wall_width, map.height - 2*wall_width),
 	}
 	return map
 end
@@ -37,8 +40,24 @@ function makeObject(world, h, w, x, y)
 	return obj
 end
 
+function drawWalls(walls)
+	for _, wall in pairs(walls) do
+		love.graphics.setColor(200,200,200)
+		love.graphics.polygon("fill", wall.body:getWorldPoints(wall.shape:getPoints()))
+		love.graphics.setColor(255,255,255)
+	end
+end
+
+function drawPlatforms(platforms)
+	for _, platform in ipairs(platforms) do
+		love.graphics.setColor(200,200,200)
+		love.graphics.polygon("fill", platform.body:getWorldPoints(platform.shape:getPoints()))
+		love.graphics.setColor(255,255,255)
+	end
+end
+
 function loadMapFromFile(fn)
-	local data = json.decode(jsonFile(fn))
+	local data = json.decode(io.open(fn, "r"):read("*all"))
 	if data["platforms"] == nil or
 		data["map_width"] == nil or
 		data["map_height"] == nil then
