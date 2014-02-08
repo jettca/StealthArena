@@ -40,7 +40,7 @@ function connectToServer(ninja)
     formattedMessage["type"] = "newConnection"
     formattedMessage["data"] = {id=ip, ninja=ninja}
 
-    udp:send(json.encode(formattedMessage))
+    udp:sendto(json.encode(formattedMessage), serverIp, port)
 
 end
 
@@ -154,7 +154,7 @@ function clientPressHandler(key)
     formattedMessage["type"] = "keyPress"
     formattedMessage["data"] = {id=ip, key=key}
 
-    udp:send(json.encode(formattedMessage))
+    udp:sendto(json.encode(formattedMessage), serverIp, port)
 end
 
 function serverPressHandler(key, ninjas)
@@ -174,7 +174,7 @@ function clientReleaseHandler(key)
     formattedMessage["type"] = "keyRelease"
     formattedMessage["data"] = {id=ip, key=key}
 
-    udp:send(json.encode(formattedMessage))
+    udp:sendto(json.encode(formattedMessage), serverIp, port)
 end
 
 function serverReleaseHandler(key, ninjas)
