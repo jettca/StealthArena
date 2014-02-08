@@ -56,9 +56,7 @@ function connectionUpdate(dt, ninjas, world)
 
             if formattedMessage.type == "newConnection" then
                 
-                local newNinja = makeNinja(200, 200, world)
-                newNinja.id = formattedMessage.data["id"]
-                newNinja.fixture:setUserData(ip)
+                local newNinja = makeNinja(200, 200, world, formattedMessage.data["id"])
                 
                 ninjas[formattedMessage.data["id"]] = newNinja
 
