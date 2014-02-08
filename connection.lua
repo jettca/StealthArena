@@ -110,7 +110,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                         localNinja.body:setX(ninja.x)
                         localNinja.body:setY(ninja.y)
                         localNinja.dir = ninja.dir
-                        localNinja.pressed = ninja.pressed
+                        --localNinja.pressed = ninja.pressed
                         localNinja.jumptime = ninja.jumptime
                         localNinja.knives_thrown = ninja.knives_thrown
                     end
