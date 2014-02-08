@@ -21,11 +21,12 @@ function makeNinja(x, y, world, ip)
             left = false,
             right = false,
             up = false,
+            x = false
         },
         touching = nil,
         jumptime = 0,
         maxjump = .2,
-        knives = {}
+        knives_thrown = 0
     }
     ninja.body = love.physics.newBody(world, x, y, 'dynamic')
     ninja.box = love.physics.newRectangleShape(frame_width, frame_height)
@@ -68,6 +69,15 @@ function moveNinja(dt, ninja)
     end
 end
 
+function throwKnife(ninja, knives, world)
+    if ninja.pressed.x then
+        local knife = makeKnife(world, ninja)
+        knives[knife.id] = knife
+        ninja.knives_thrown = ninja.knives_thrown + 1
+        ninja.pressed.x = false
+    end
+end
+
 function drawNinja(ninja)
     drawX = ninja.body:getX() - frame_width/2
     drawY = ninja.body:getY() - frame_height/2
@@ -80,7 +90,28 @@ function drawNinja(ninja)
     end
 end
 
-function throwKnife(world, ninja)
-    local knife = {}
-    knife.body = love.physics.newBody(world, ninja.body:getX(), ninja.body:getY())
+function makeKnife(world, ninja)
+    local knife = {
+        radius = 10,
+        ninja = ninja,
+        id = ninja.id .. tostring(ninja.knives_thrown),
+        speed = 1000
+    }
+    knife.body = love.physics.newBody(world, ninja.body:getX(), ninja.body:getY(), "dynamic")
+    knife.shape = love.physics.newCircleShape(knife.radius)
+    knife.fixture = love.physics.newFixture(knife.body, knife.shape)
+
+    if ninja.dir == "right" then
+        knife.body:setLinearVelocity(knife.speed, 0)
+        knife.body:setX(ninja.body:getX() + frame_width)
+    else
+        knife.body:setLinearVelocity(-knife.speed, 0)
+        knife.body:getX(ninja.body:getX() - frame_width)
+    end
+
+    return knife
+end
+
+function drawKnife(knife)
+        love.graphics.circle("fill", knife.body:getX(), knife.body:getY(), knife.shape:getRadius(), 100)
 end

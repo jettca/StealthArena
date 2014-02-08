@@ -4,6 +4,7 @@ dofile("connection.lua")
 dofile("map.lua")
 
 local ninjas = {}
+local knives = {}
 local myninja
 local world
 local map
@@ -41,6 +42,7 @@ function love.update(dt)
     -- ninja movement input
     for _, ninja in pairs(ninjas) do
         moveNinja(dt, ninja)
+        throwKnife(ninja, knives, world)
     end
 end
 
@@ -54,6 +56,10 @@ function love.draw()
 
     for _, ninja in pairs(ninjas) do
         drawNinja(ninja)
+    end
+
+    for _, knife in pairs(knives) do
+        drawKnife(knife)
     end
 end
 
@@ -83,10 +89,10 @@ end
 
 function beginContact(a, b, coll)
     local ninja
-    if a:getUserData() == "floor" then
+    if a:getUserData() == "floor" and b:getUserData() ~= nil then
         ninja = ninjas[b:getUserData()]
         ninja.touching = a:getBody()
-    elseif b:getUserData() == "floor" then
+    elseif b:getUserData() == "floor" and b:getUserData() ~= nil then
         ninja = ninjas[a:getUserData()]
         ninja.touching = b:getBody()
     end
@@ -94,13 +100,11 @@ end
 
 function endContact(a, b, coll)
     local ninja
-    if a:getUserData() == "floor" then
+    if a:getUserData() == "floor" and b:getUserData() ~= nil then
         ninja = ninjas[b:getUserData()]
-    elseif b:getUserData() == "floor" then
+        ninja.touching = nil
+    elseif b:getUserData() == "floor" and b:getUserData() ~= nil then
         ninja = ninjas[a:getUserData()]
-    else
-        return
+        ninja.touching = nil
     end
-
-    ninja.touching = nil
 end
