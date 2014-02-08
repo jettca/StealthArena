@@ -25,6 +25,18 @@ function love.load(arg)
     local ninja = makeNinja(1000, 1000, world, ip)
     ninjas[ninja.id] = ninja
     myninja = ninjas[ip]
+    myninja.visible = true
+
+    myninja.los.body = love.physics.newBody(world, x, y, "dynamic")
+    myninja.los.body:setGravityScale(0)
+    myninja.los.body:setMass(0)
+    myninja.los.shape = love.physics.newPolygonShape(
+        0, 0, myninja.los.length, myninja.los.height/2,
+        myninja.los.length, -myninja.los.height/2
+    )
+    myninja.los.fixture = love.physics.newFixture(myninja.los.body, myninja.los.shape)
+    myninja.los.fixture:setSensor(true)
+    myninja.los.fixture:setUserData("los")
 
     love.graphics.setBackgroundColor(104, 136, 248)
     love.window.setMode(windowX, windowY)

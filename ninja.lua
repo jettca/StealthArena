@@ -29,7 +29,7 @@ function makeNinja(x, y, world, ip)
         knives_thrown = 0,
         visible = false,
         los = {
-            length = 300,
+            length = 500,
             height = 500
         }
     }
@@ -37,16 +37,6 @@ function makeNinja(x, y, world, ip)
     ninja.box = love.physics.newRectangleShape(frame_width, frame_height)
     ninja.fixture = love.physics.newFixture(ninja.body, ninja.box, 20)
 
-    ninja.los.body = love.physics.newBody(world, x, y, "dynamic")
-    ninja.los.body:setGravityScale(0)
-    ninja.los.body:setMass(0)
-    ninja.los.shape = love.physics.newPolygonShape(
-        0, 0, ninja.los.length, ninja.los.height/2,
-        ninja.los.length, -ninja.los.height/2
-    )
-    ninja.los.fixture = love.physics.newFixture(ninja.los.body, ninja.los.shape)
-    ninja.los.fixture:setSensor(true)
-    ninja.los.fixture:setUserData("los")
 
     ninja.id = ip
     ninja.fixture:setUserData(ip)
@@ -71,7 +61,9 @@ function moveNinja(dt, ninja)
     if ninja.pressed.right then
         if ninja.dir == 'left' then
             ninja.dir = 'right'
-            ninja.los.body:setAngle(0)
+            if ninja.los.body then
+                ninja.los.body:setAngle(0)
+            end
         end
         ninja.anim.walkRight:update(dt)
         if vx < ninja.speed then
@@ -80,7 +72,9 @@ function moveNinja(dt, ninja)
     elseif ninja.pressed.left then
         if ninja.dir == 'right' then
             ninja.dir = 'left'
-            ninja.los.body:setAngle(3.14)
+            if ninja.los.body then
+                ninja.los.body:setAngle(3.14)
+            end
         end
         ninja.anim.walkLeft:update(dt)
         if vx > -ninja.speed then
@@ -90,12 +84,14 @@ function moveNinja(dt, ninja)
         ninja.body:applyForce(-vx*ninja.decel, 0)
     end
 
-    if ninja.dir == 'right' then
-        ninja.los.body:setX(ninja.body:getX())
-        ninja.los.body:setY(ninja.body:getY())
-    else
-        ninja.los.body:setX(ninja.body:getX())
-        ninja.los.body:setY(ninja.body:getY())
+    if ninja.los.body then
+        if ninja.dir == 'right' then
+            ninja.los.body:setX(ninja.body:getX())
+            ninja.los.body:setY(ninja.body:getY())
+        else
+            ninja.los.body:setX(ninja.body:getX())
+            ninja.los.body:setY(ninja.body:getY())
+        end
     end
 end
 
