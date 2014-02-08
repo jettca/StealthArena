@@ -13,7 +13,7 @@ isServer = false
 
 sleepTime = 0.1
 sleepTimer = 0
-    
+
 function connectionSetup(arg)
 
     if #arg > 1 then
@@ -30,7 +30,9 @@ function connectionSetup(arg)
         udp:setsockname('*', port)
     end
 
-    ip, _ = socket.dns.toip(socket.dns.gethostname())
+    local client = socket.connect( "www.google.com", 80 )
+    ip, _ = client:getsockname()
+    -- ip, _ = socket.dns.toip(socket.dns.gethostname())
     print(ip)
 end
 
@@ -55,9 +57,9 @@ function connectionUpdate(dt, ninjas, world)
             print(formattedMessage.type)
 
             if formattedMessage.type == "newConnection" then
-                
+
                 local newNinja = makeNinja(200, 200, world, formattedMessage.data["id"])
-                
+
                 ninjas[formattedMessage.data["id"]] = newNinja
 
                 if isServer then
@@ -91,7 +93,7 @@ function connectionUpdate(dt, ninjas, world)
                 end
 
             elseif formattedMessage.type == "worldUpdate" and isClient then
-                
+
                 for _, ninja in pairs(formattedMessage.data) do
                     local localNinja = ninjas[ninja.id]
                     localNinja.body:setX(ninja.x)
@@ -117,7 +119,7 @@ function connectionUpdate(dt, ninjas, world)
             for _, ninja in pairs(ninjas) do
                 formattedMessage.data[ninja.id] = {id=ninja.id, x=ninja.body:getX(), y=ninja.body:getY()}
             end
-        
+
             for _, ninja in pairs(ninjas) do
                 if ninja.id ~= ip then
                     udp:sendto(json.encode(formattedMessage), ninja.id, port)
@@ -161,7 +163,7 @@ function serverReleaseHandler(key, ninjas)
     local formattedMessage = {}
     formattedMessage["type"] = "keyPress"
     formattedMessage["data"] = {id=ip, key=key}
-    
+
     for _, ninja in pairs(ninjas) do
         if ninja.id ~= ip then
             udp:sendto(json.encode(formattedMessage), ninja.id, port)
