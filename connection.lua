@@ -56,7 +56,6 @@ function connectionUpdate(dt, ninjas, world)
 
 
     if rawMessage then
-        print(rawMessage)
 
         local formattedMessage = json.decode(rawMessage)
         if formattedMessage ~= nil then
@@ -101,7 +100,7 @@ function connectionUpdate(dt, ninjas, world)
 
             elseif isClient and formattedMessage.type == "worldUpdate" then
 
-                for _, ninja in pairs(formattedMessage.data) do
+                for _, ninja in pairs(formattedMessage.data["ninjas"]) do
                     if ninjas[ninja.id] == nil then
                         local newNinja = makeNinja(ninja.x, ninja.y, world, ninja.id)
                         newNinja.pressed = ninja.pressed
@@ -113,6 +112,18 @@ function connectionUpdate(dt, ninjas, world)
                         localNinja.body:setY(ninja.y)
                         localNinja.dir = ninja.dir
                         localNinja.pressed = ninja.pressed
+                    end
+                end
+
+                for _, knife in pairs(formattedMessage.data["knives"]) do
+                    if knives[knife.id] == nil then
+                        
+                    else
+                        local localKnife = knives[knife.id]
+                        localKnife.body:setX(knife.x)
+                        localKnife.body:setY(knife.y)
+                        localKnife.body:setLinearVelocity(vx, vy)
+                        
                     end
                 end
             end
@@ -135,9 +146,15 @@ function connectionUpdate(dt, ninjas, world)
             local formattedMessage = {}
             formattedMessage["type"] = "worldUpdate"
             formattedMessage["data"] = {}
+            
             for _, ninja in pairs(ninjas) do
-                formattedMessage.data[ninja.id] = {id=ninja.id, x=ninja.body:getX(), y=ninja.body:getY(), dir=ninja.dir, pressed=ninja.pressed}
+                formattedMessage.data["ninjas"][ninja.id] = {id=ninja.id, x=ninja.body:getX(), y=ninja.body:getY(), dir=ninja.dir, pressed=ninja.pressed}
             end
+
+            for _, knife in pairs(knives) do
+                formattedMessage.data["knives"][knife.id] = {id=knife.id, x=knife.body:getX(), y=knife.body:getY(), vx, vy=knife.body.getLinearVelocity()}
+            end
+
 
             for _, ninja in pairs(ninjas) do
                 if ninja.id ~= ip then
