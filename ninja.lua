@@ -40,7 +40,6 @@ end
 function moveNinja(dt, ninja)
     vx, vy = ninja.body:getLinearVelocity()
     if ninja.pressed.up then
-        print(ninja.jumptime)
         if ninja.touching ~= nil and ninja.touching.body:getY() >= ninja.body:getY() then
             ninja.body:setLinearVelocity(vx, ninja.jump)
             ninja.jumptime = ninja.maxjump
