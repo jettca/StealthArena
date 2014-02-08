@@ -106,7 +106,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                 for _, ninja in pairs(formattedMessage.data["ninjas"]) do
                     if ninjas[ninja.id] == nil then
                         local newNinja = makeNinja(ninja.x, ninja.y, world, ninja.id)
-                        newNinja.pressed = ninja.pressed
+                        --newNinja.pressed = ninja.pressed
                         newNinja.dir = ninja.dir
                         ninjas[ninja.id] = newNinja
                     else
