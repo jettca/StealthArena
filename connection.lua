@@ -158,7 +158,7 @@ function clientPressHandler(key)
     formattedMessage["type"] = "keyPress"
     formattedMessage["data"] = {id=ip, key=key}
 
-    --udp:sendto(json.encode(formattedMessage), serverIp, port)
+    udp:sendto(json.encode(formattedMessage), serverIp, port)
 end
 
 function serverPressHandler(key, ninjas)
@@ -178,7 +178,7 @@ function clientReleaseHandler(key)
     formattedMessage["type"] = "keyRelease"
     formattedMessage["data"] = {id=ip, key=key}
 
-    --udp:sendto(json.encode(formattedMessage), serverIp, port)
+    udp:sendto(json.encode(formattedMessage), serverIp, port)
 end
 
 function serverReleaseHandler(key, ninjas)
