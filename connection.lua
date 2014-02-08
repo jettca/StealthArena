@@ -112,6 +112,9 @@ function connectionUpdate(dt, ninjas, knives, world)
                         localNinja.body:setY(ninja.y)
                         localNinja.dir = ninja.dir
                         localNinja.pressed = ninja.pressed
+                        localNinja.touching = ninja.touching 
+                        localNinja.jumptime = ninja.jumptime
+                        localNinja.knives_thrown = ninja.knives_thrown
                     end
                 end
 
@@ -150,7 +153,14 @@ function connectionUpdate(dt, ninjas, knives, world)
             formattedMessage.data["knives"] = {}
             
             for _, ninja in pairs(ninjas) do
-                formattedMessage.data["ninjas"][ninja.id] = {id=ninja.id, x=ninja.body:getX(), y=ninja.body:getY(), dir=ninja.dir, pressed=ninja.pressed}
+                formattedMessage.data["ninjas"][ninja.id] = {id=ninja.id, 
+                x=ninja.body:getX(), 
+                y=ninja.body:getY(), 
+                dir=ninja.dir, 
+                pressed=ninja.pressed, 
+                touching=ninja.touching, 
+                jumptime=ninja.jumptime,
+                knives_thrown=ninja.knives_thrown}
             end
 
             for _, knife in pairs(knives) do
