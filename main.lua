@@ -25,7 +25,7 @@ function love.load(arg)
     ground.shape = love.physics.newRectangleShape(windowX, 50)
     ground.fixture = love.physics.newFixture(ground.body, ground.shape)
     ground.fixture:setUserData("ground")
-
+    
     local ninja = makeNinja(200, 200, world, ip)
     ninjas[ninja.id] = ninja
     myninja = ninjas[ip]
