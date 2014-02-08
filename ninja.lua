@@ -1,7 +1,7 @@
 local anim8 = require 'anim8'
 local ninja_im = love.graphics.newImage('ninja.png')
-local frame_width = 50
-local frame_height = 77
+frame_width = 50
+frame_height = 77
 local ninja_g = anim8.newGrid(frame_width, frame_height, ninja_im:getWidth(), ninja_im:getHeight())
 
 function makeNinja(x, y, world)
@@ -42,7 +42,6 @@ function moveNinja(dt, ninja)
         elseif ninja.jumptime > 0 then
             ninja.body:setLinearVelocity(vx, ninja.jump)
             ninja.jumptime = ninja.jumptime - dt
-            print(ninja.jumptime)
         end
     else
         ninja.jumptime = 0

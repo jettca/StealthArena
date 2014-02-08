@@ -1,3 +1,4 @@
+dofile("camera.lua")
 dofile("ninja.lua")
 dofile("connection.lua")
 --dofile("map.lua")
@@ -7,11 +8,10 @@ local myninja
 local world
 local map
 local ground
+local windowX = 800
+local windowY = 600
 
 function love.load(arg)
-
-    local windowSize = 650
-
     connectionSetup(arg)
 
     -- Set up world
@@ -21,8 +21,8 @@ function love.load(arg)
     
 --    map = makeMap(world)
     ground = {}
-    ground.body = love.physics.newBody(world, windowSize/2, windowSize - 50/2)
-    ground.shape = love.physics.newRectangleShape(windowSize, 50)
+    ground.body = love.physics.newBody(world, windowX/2, windowY - 50/2)
+    ground.shape = love.physics.newRectangleShape(windowX, 50)
     ground.fixture = love.physics.newFixture(ground.body, ground.shape)
     ground.fixture:setUserData("ground")
 
@@ -33,11 +33,13 @@ function love.load(arg)
     myninja = ninjas[ip]
 
     love.graphics.setBackgroundColor(104, 136, 248)
-    love.window.setMode(650, 650)
+    love.window.setMode(windowX, windowY)
 
     if(isClient) then
         connectToServer(myninja)
     end
+
+    camera:set()
 end
 
 function love.update(dt)
@@ -51,18 +53,23 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.translate(-100, -300)
+    camera:unset()
+    camera:setPosition(myninja.body:getX() - windowX/2, myninja.body:getY() - windowY/2)
+    camera:set()
+
     love.graphics.setColor(72, 160, 14)
     love.graphics.polygon("fill", ground.body:getWorldPoints(ground.shape:getPoints()))
     love.graphics.setColor(255, 255, 255)
 
     for _, ninja in pairs(ninjas) do
+        drawX = ninja.body:getX() - frame_width/2
+        drawY = ninja.body:getY() - frame_height/2
         if ninja.dir == '' then
-            ninja.anim.stand:draw(ninja.image, ninja.body:getX(), ninja.body:getY())
+            ninja.anim.stand:draw(ninja.image, drawX, drawY)
         elseif ninja.dir == 'left' then
-            ninja.anim.walkLeft:draw(ninja.image, ninja.body:getX(), ninja.body:getY())
+            ninja.anim.walkLeft:draw(ninja.image, drawX, drawY)
         elseif ninja.dir == 'right' then
-            ninja.anim.walkRight:draw(ninja.image, ninja.body:getX(), ninja.body:getY())
+            ninja.anim.walkRight:draw(ninja.image, drawX, drawY)
         end
     end
 end
