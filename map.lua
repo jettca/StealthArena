@@ -17,24 +17,26 @@ function makeMap(world)
 			p.x + p.w/2,
 			p.y + p.h/2,
 			p.w,
-			p.h
+			p.h,
+            "floor"
 		)
 		table.insert(map.platforms, platform)
 	end
 	map.walls = {
 		top = makeObject(world, map.width/2, wall_size/2, map.width, wall_size),
-		bottom = makeObject(world, map.width/2, map.height - wall_size/2, map.width, wall_size),
+		bottom = makeObject(world, map.width/2, map.height - wall_size/2, map.width, wall_size, "floor"),
 		left = makeObject(world, wall_size/2, map.height/2, wall_size, map.height - 2*wall_size),
-		right = makeObject(world, map.width - wall_size/2, map.height/2, wall_size, map.height - 2*wall_size),
+		right = makeObject(world, map.width - wall_size/2, map.height/2, wall_size, map.height - 2*wall_size)
 	}
 	return map
 end
 
-function makeObject(world, x, y, w, h)
+function makeObject(world, x, y, w, h, data)
 	obj =  {}
 	obj.body = love.physics.newBody(world, x, y)
 	obj.shape = love.physics.newRectangleShape(w, h)
 	obj.fixture = love.physics.newFixture(obj.body, obj.shape)
+    obj.fixture:setUserData(data)
 	return obj
 end
 
