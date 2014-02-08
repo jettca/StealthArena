@@ -11,7 +11,7 @@ udp:setoption("broadcast", true)
 isClient = false
 isServer = false
 
-sleepTime = 0.1
+sleepTime = 0.05
 sleepTimer = 0
 
 function connectionSetup(arg)
