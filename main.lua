@@ -22,7 +22,7 @@ function love.load(arg)
 
     map = makeMap(world)
     
-    local ninja = makeNinja(200, 200, world, ip)
+    local ninja = makeNinja(1000, 1000, world, ip)
     ninjas[ninja.id] = ninja
     myninja = ninjas[ip]
 
