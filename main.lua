@@ -35,7 +35,7 @@ function love.load(arg)
     love.graphics.setBackgroundColor(104, 136, 248)
     love.window.setMode(650, 650)
 
---    connectToServer(myninja)
+    connectToServer(myninja)
 end
 
 function love.update(dt)
@@ -71,7 +71,7 @@ function love.keypressed(key)
     if isClient then
         clientPressHandler(key)
     else
-        serverPressHandler(key)
+        serverPressHandler(key, ninjas)
     end
 end
 
@@ -80,9 +80,9 @@ function love.keyreleased(key)
         myninja.pressed[key] = false
     end
     if isClient then
---        clientReleaseHandler(key)
+        clientReleaseHandler(key)
     else
---        serverReleaseHandler(key)
+        serverReleaseHandler(key, ninjas)
     end
 end
 
