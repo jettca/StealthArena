@@ -1,7 +1,7 @@
 require "json"
 local socket = require "socket"
 local udp = socket.udp()
-local port =  6500
+local port = 6500
 local data, msg_or_ip, port_or_nil, msg
 ip = nil
 serverIp = nil
@@ -104,7 +104,6 @@ function connectionUpdate(dt, ninjas, world)
                         localNinja.body:setY(ninja.y)
                     end
                 end
-
             end
 
         end
@@ -127,7 +126,11 @@ function connectionUpdate(dt, ninjas, world)
 
             for _, ninja in pairs(ninjas) do
                 if ninja.id ~= ip then
-                    udp:sendto(json.encode(formattedMessage), ninja.id, port)
+                    print("send worldupdate to "..ninja.id)
+                    _, err = udp:sendto(json.encode(formattedMessage), ninja.id, port)
+                    if err then
+                        print("error: "..err)
+                    end
                 end
             end
 
