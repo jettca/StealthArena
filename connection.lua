@@ -106,7 +106,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                 for _, ninja in pairs(formattedMessage.data["ninjas"]) do
                     if ninjas[ninja.id] == nil then
                         local newNinja = makeNinja(ninja.x, ninja.y, world, ninja.id)
-                        --newNinja.pressed = ninja.pressed
+                        newNinja.pressed = ninja.pressed
                         newNinja.dir = ninja.dir
                         ninjas[ninja.id] = newNinja
                     else
@@ -114,7 +114,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                         localNinja.body:setX(ninja.x)
                         localNinja.body:setY(ninja.y)
                         localNinja.dir = ninja.dir
-                        --localNinja.pressed = ninja.pressed
+                        localNinja.pressed = ninja.pressed
                         localNinja.jumptime = ninja.jumptime
                         localNinja.knives_thrown = ninja.knives_thrown
                     end
@@ -159,7 +159,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                 x=ninja.body:getX(), 
                 y=ninja.body:getY(), 
                 dir=ninja.dir, 
-                --pressed=ninja.pressed, 
+                pressed=ninja.pressed, 
                 jumptime=ninja.jumptime,
                 knives_thrown=ninja.knives_thrown}
             end
