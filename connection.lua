@@ -45,7 +45,7 @@ function connectToServer(ninja)
 
 end
 
-function connectionUpdate(dt, ninjas, world)
+function connectionUpdate(dt, ninjas, knives, world)
 
     local rawMessage, msg, receiveIp, receivePort
     if isServer then
@@ -123,7 +123,7 @@ function connectionUpdate(dt, ninjas, world)
                         localKnife.body:setX(knife.x)
                         localKnife.body:setY(knife.y)
                         localKnife.body:setLinearVelocity(vx, vy)
-                        
+
                     end
                 end
             end
@@ -146,13 +146,15 @@ function connectionUpdate(dt, ninjas, world)
             local formattedMessage = {}
             formattedMessage["type"] = "worldUpdate"
             formattedMessage["data"] = {}
+            formattedMessage.data["ninjas"] = {}
+            formattedMessage.data["knives"] = {}
             
             for _, ninja in pairs(ninjas) do
                 formattedMessage.data["ninjas"][ninja.id] = {id=ninja.id, x=ninja.body:getX(), y=ninja.body:getY(), dir=ninja.dir, pressed=ninja.pressed}
             end
 
             for _, knife in pairs(knives) do
-                formattedMessage.data["knives"][knife.id] = {id=knife.id, x=knife.body:getX(), y=knife.body:getY(), vx, vy=knife.body.getLinearVelocity()}
+                formattedMessage.data["knives"][knife.id] = {id=knife.id, x=knife.body:getX(), y=knife.body:getY(), vx, vy=knife.body:getLinearVelocity()}
             end
 
 
