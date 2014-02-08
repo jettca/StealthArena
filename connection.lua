@@ -66,7 +66,7 @@ function connectionUpdate(dt, ninjas, knives, world)
 
                 local newNinja = makeNinja(200, 200, world, formattedMessage.data["id"])
 
-                ninjas[formattedMessage.data["id"]] = newNinja
+                ninjas[formattedMessage.data["ninjas"]["id"]] = newNinja
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
@@ -77,7 +77,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                 end
 
             elseif formattedMessage.type == "keyPress" then
-                ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = true
+                ninjas[formattedMessage.data["ninjas"]["id"]].pressed[formattedMessage.data["key"]] = true
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
@@ -88,7 +88,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                 end
 
             elseif formattedMessage.type == "keyRelease" then
-                ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = false
+                ninjas[formattedMessage.data["ninjas"]["id"]].pressed[formattedMessage.data["key"]] = false
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
