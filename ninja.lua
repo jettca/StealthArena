@@ -16,7 +16,7 @@ function makeNinja(x, y, world, ip)
         accel = 50000,
         decel = 500,
         jump = -600,
-        dir = '',
+        dir = 'right',
         pressed = {
             left = false,
             right = false,
@@ -64,7 +64,6 @@ function moveNinja(dt, ninja)
             ninja.body:applyForce(-ninja.accel, 0)
         end
     else
-        ninja.dir = ''
         ninja.body:applyForce(-vx*ninja.decel, 0)
     end
 end
@@ -81,9 +80,7 @@ end
 function drawNinja(ninja)
     drawX = ninja.body:getX() - frame_width/2
     drawY = ninja.body:getY() - frame_height/2
-    if ninja.dir == '' then
-        ninja.anim.stand:draw(ninja.image, drawX, drawY)
-    elseif ninja.dir == 'left' then
+    if ninja.dir == 'left' then
         ninja.anim.walkLeft:draw(ninja.image, drawX, drawY)
     elseif ninja.dir == 'right' then
         ninja.anim.walkRight:draw(ninja.image, drawX, drawY)
@@ -91,11 +88,12 @@ function drawNinja(ninja)
 end
 
 function makeKnife(world, ninja)
+    vx, vy = ninja.body:getLinearVelocity()
     local knife = {
-        radius = 10,
+        radius = 5,
         ninja = ninja,
         id = ninja.id .. tostring(ninja.knives_thrown),
-        speed = 1000
+        speed = 1500
     }
     knife.body = love.physics.newBody(world, ninja.body:getX(), ninja.body:getY(), "dynamic")
     knife.shape = love.physics.newCircleShape(knife.radius)
@@ -103,10 +101,10 @@ function makeKnife(world, ninja)
     knife.fixture:setUserData(knife.id)
 
     if ninja.dir == "right" then
-        knife.body:setLinearVelocity(knife.speed, 0)
+        knife.body:setLinearVelocity(knife.speed, vy)
         knife.body:setX(ninja.body:getX() + frame_width)
     else
-        knife.body:setLinearVelocity(-knife.speed, 0)
+        knife.body:setLinearVelocity(-knife.speed, vy)
         knife.body:setX(ninja.body:getX() - frame_width)
     end
 
