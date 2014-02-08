@@ -20,7 +20,7 @@ function connectionSetup(arg)
         isClient = true
         print("client")
         serverIp = arg[2]
-
+        print(serverIp)
         udp:setpeername(serverIp, port)
 
     else
@@ -31,7 +31,7 @@ function connectionSetup(arg)
     end
 
     ip, _ = socket.dns.toip(socket.dns.gethostname())
-
+    print(ip)
 end
 
 function connectToServer(ninja)
@@ -118,7 +118,9 @@ function serverPressHandler(key, ninjas)
     formattedMessage["data"] = {id=ip, key=key}
 
     for _, ninja in pairs(ninjas) do
-        udp:sendto(json.encode(formattedMessage), ninja.id, port)
+        if ninja.id ~= ip then
+            udp:sendto(json.encode(formattedMessage), ninja.id, port)
+        end
     end
 end
 
@@ -136,6 +138,8 @@ function serverReleaseHandler(key, ninjas)
     formattedMessage["data"] = {id=ip, key=key}
     
     for _, ninja in pairs(ninjas) do
-        udp:sendto(json.encode(formattedMessage), ninja.id, port)
+        if ninja.id ~= ip then
+            udp:sendto(json.encode(formattedMessage), ninja.id, port)
+        end
     end
 end
