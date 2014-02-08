@@ -104,11 +104,15 @@ function connectionUpdate(dt, ninjas, world)
                 for _, ninja in pairs(formattedMessage.data) do
                     if ninjas[ninja.id] == nil then
                         local newNinja = makeNinja(ninja.x, ninja.y, world, ninja.id)
+                        newNinja.pressed = ninja.pressed
+                        newNinja.dir = ninja.dir
                         ninjas[ninja.id] = newNinja
                     else
                         local localNinja = ninjas[ninja.id]
                         localNinja.body:setX(ninja.x)
                         localNinja.body:setY(ninja.y)
+                        localNinja.dir = ninja.dir
+                        localNinja.pressed = ninja.pressed
                     end
                 end
             end
@@ -132,12 +136,11 @@ function connectionUpdate(dt, ninjas, world)
             formattedMessage["type"] = "worldUpdate"
             formattedMessage["data"] = {}
             for _, ninja in pairs(ninjas) do
-                formattedMessage.data[ninja.id] = {id=ninja.id, x=ninja.body:getX(), y=ninja.body:getY()}
+                formattedMessage.data[ninja.id] = {id=ninja.id, x=ninja.body:getX(), y=ninja.body:getY(), dir=ninja.dir, pressed=ninja.pressed}
             end
 
             for _, ninja in pairs(ninjas) do
                 if ninja.id ~= ip then
-                    print("send worldupdate to "..ninja.id)
                     _, err = udp:sendto(json.encode(formattedMessage), ninja.id, port)
                     if err then
                         print("error: "..err)
@@ -155,7 +158,7 @@ function clientPressHandler(key)
     formattedMessage["type"] = "keyPress"
     formattedMessage["data"] = {id=ip, key=key}
 
-    udp:sendto(json.encode(formattedMessage), serverIp, port)
+    --udp:sendto(json.encode(formattedMessage), serverIp, port)
 end
 
 function serverPressHandler(key, ninjas)
@@ -165,7 +168,7 @@ function serverPressHandler(key, ninjas)
 
     for _, ninja in pairs(ninjas) do
         if ninja.id ~= ip then
-            udp:sendto(json.encode(formattedMessage), ninja.id, port)
+            --udp:sendto(json.encode(formattedMessage), ninja.id, port)
         end
     end
 end
@@ -175,7 +178,7 @@ function clientReleaseHandler(key)
     formattedMessage["type"] = "keyRelease"
     formattedMessage["data"] = {id=ip, key=key}
 
-    udp:sendto(json.encode(formattedMessage), serverIp, port)
+    --udp:sendto(json.encode(formattedMessage), serverIp, port)
 end
 
 function serverReleaseHandler(key, ninjas)
@@ -185,7 +188,7 @@ function serverReleaseHandler(key, ninjas)
 
     for _, ninja in pairs(ninjas) do
         if ninja.id ~= ip then
-            udp:sendto(json.encode(formattedMessage), ninja.id, port)
+            --udp:sendto(json.encode(formattedMessage), ninja.id, port)
         end
     end
 end
