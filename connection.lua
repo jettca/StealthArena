@@ -64,7 +64,7 @@ function connectionUpdate(dt, ninjas, world)
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
-                        if ninja.id ~= formattedMessage.data["id"] then
+                        if ninja.id ~= formattedMessage.data["id"] and ninja.id ~= ip then
                             udp:sendto(rawMessage, ninja.id, port)
                         end
                     end
@@ -75,7 +75,7 @@ function connectionUpdate(dt, ninjas, world)
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
-                        if ninja.id ~= formattedMessage.data["id"] then
+                        if ninja.id ~= formattedMessage.data["id"] and ninja.id ~= ip then
                             udp:sendto(rawMessage, ninja.id, port)
                         end
                     end
@@ -86,7 +86,7 @@ function connectionUpdate(dt, ninjas, world)
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
-                        if ninja.id ~= formattedMessage.data["id"] then
+                        if ninja.id ~= formattedMessage.data["id"] and ninja.id ~= ip then
                             udp:sendto(rawMessage, ninja.id, port)
                         end
                     end
