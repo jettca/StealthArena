@@ -60,13 +60,12 @@ function connectionUpdate(dt, ninjas, knives, world)
         local formattedMessage = json.decode(rawMessage)
         if formattedMessage ~= nil then
 
-            print(formattedMessage.type)
 
             if formattedMessage.type == "newConnection" then
 
                 local newNinja = makeNinja(200, 200, world, formattedMessage.data["id"])
 
-                ninjas[formattedMessage.data["ninjas"]["id"]] = newNinja
+                ninjas[formattedMessage.data["id"]] = newNinja
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
@@ -77,7 +76,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                 end
 
             elseif formattedMessage.type == "keyPress" then
-                ninjas[formattedMessage.data["ninjas"]["id"]].pressed[formattedMessage.data["key"]] = true
+                ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = true
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
@@ -88,7 +87,7 @@ function connectionUpdate(dt, ninjas, knives, world)
                 end
 
             elseif formattedMessage.type == "keyRelease" then
-                ninjas[formattedMessage.data["ninjas"]["id"]].pressed[formattedMessage.data["key"]] = false
+                ninjas[formattedMessage.data["id"]].pressed[formattedMessage.data["key"]] = false
 
                 if isServer then
                     for _, ninja in pairs(ninjas) do
@@ -112,7 +111,6 @@ function connectionUpdate(dt, ninjas, knives, world)
                         localNinja.body:setY(ninja.y)
                         localNinja.dir = ninja.dir
                         localNinja.pressed = ninja.pressed
-                        localNinja.touching = ninja.touching 
                         localNinja.jumptime = ninja.jumptime
                         localNinja.knives_thrown = ninja.knives_thrown
                     end
@@ -158,7 +156,6 @@ function connectionUpdate(dt, ninjas, knives, world)
                 y=ninja.body:getY(), 
                 dir=ninja.dir, 
                 pressed=ninja.pressed, 
-                touching=ninja.touching, 
                 jumptime=ninja.jumptime,
                 knives_thrown=ninja.knives_thrown}
             end
