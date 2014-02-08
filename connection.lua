@@ -50,7 +50,7 @@ function connectionUpdate(dt, ninjas, world)
     if isServer then
         rawMessage, msg = udp:receive()
     else
-        rawMessage, msg, receiveIp, receivePort = udp:receivefrom()
+        rawMessage, msg = udp:receive()
     end
 
 
