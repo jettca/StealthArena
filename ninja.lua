@@ -5,10 +5,6 @@ frame_height = 77
 local ninja_g = anim8.newGrid(frame_width, frame_height, ninja_im:getWidth(), ninja_im:getHeight())
 
 function makeNinja(x, y, world, ip)
-    ninja.id = ip
-    ninja.fixture:setUserData(ip)
-    ninjas[ninja.id] = ninja
-
     local ninja = {
         image = ninja_im,
         anim = {
@@ -34,6 +30,10 @@ function makeNinja(x, y, world, ip)
     ninja.body = love.physics.newBody(world, x, y, 'dynamic')
     ninja.box = love.physics.newRectangleShape(frame_width, frame_height)
     ninja.fixture = love.physics.newFixture(ninja.body, ninja.box, 20)
+
+    ninja.id = ip
+    ninja.fixture:setUserData(ip)
+    ninjas[ninja.id] = ninja
 
     return ninja
 end
