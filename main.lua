@@ -26,10 +26,7 @@ function love.load(arg)
     ground.fixture = love.physics.newFixture(ground.body, ground.shape)
     ground.fixture:setUserData("ground")
 
-    local ninja = makeNinja(200, 200, world)
-    ninja.id = ip
-    ninja.fixture:setUserData(ip)
-    ninjas[ninja.id] = ninja
+    local ninja = makeNinja(200, 200, world, ip)
     myninja = ninjas[ip]
 
     love.graphics.setBackgroundColor(104, 136, 248)

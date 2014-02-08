@@ -4,7 +4,11 @@ frame_width = 50
 frame_height = 77
 local ninja_g = anim8.newGrid(frame_width, frame_height, ninja_im:getWidth(), ninja_im:getHeight())
 
-function makeNinja(x, y, world)
+function makeNinja(x, y, world, ip)
+    ninja.id = ip
+    ninja.fixture:setUserData(ip)
+    ninjas[ninja.id] = ninja
+
     local ninja = {
         image = ninja_im,
         anim = {
