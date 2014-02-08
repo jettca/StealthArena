@@ -1,8 +1,11 @@
 dofile("ninja.lua")
 dofile("connection.lua")
+dofile("map.lua")
 
 local ninjas = {}
 local myninja
+local world
+local map
 
 function love.load(arg)
 
@@ -11,7 +14,9 @@ function love.load(arg)
     -- Set up world
     love.physics.setMeter(64)
     world = love.physics.newWorld(0, 0, true)
-    ninja = makeNinja(200, 200)
+    map = makeMap()
+
+    local ninja = makeNinja(200, 200, world)
     ninja.id = ip
     ninjas[ninja.id] = ninja
     myninja = ninjas[ip]
@@ -53,5 +58,10 @@ end
 function love.keyreleased(key)
     if myninja.pressed[key] ~= nil then
         myninja.pressed[key] = false
+    end
+    if isClient then
+        clientReleaseHandler(key)
+    else
+        serverReleaseHandler(key)
     end
 end

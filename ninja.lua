@@ -1,11 +1,10 @@
 local anim8 = require 'anim8'
+local ninja_im = love.graphics.newImage('ninja.png')
+local frame_width = 50
+local frame_height = 77
+local ninja_g = anim8.newGrid(frame_width, frame_height, ninja_im:getWidth(), ninja_im:getHeight())
 
-function makeNinja(x, y)
-    local ninja_im = love.graphics.newImage('ninja.png')
-    local width = 50
-    local height = 77
-    local ninja_g = anim8.newGrid(width, height, ninja_im:getWidth(), ninja_im:getHeight())
-
+function makeNinja(x, y, world)
     local ninja = {
         image = ninja_im,
         anim = {
@@ -25,9 +24,8 @@ function makeNinja(x, y)
         }
     }
     ninja.body = love.physics.newBody(world, x, y, 'dynamic')
-    ninja.box = love.physics.newRectangleShape(width, height)
+    ninja.box = love.physics.newRectangleShape(frame_width, frame_height)
     ninja.fixture = love.physics.newFixture(ninja.body, ninja.box, 20)
-    ninja.fixture:setUserData('ninja')
 
     return ninja
 end
