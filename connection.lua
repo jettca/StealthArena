@@ -106,6 +106,8 @@ function connectionUpdate(dt, ninjas, world)
             end
 
         end
+    else
+        print(msg)
     end
 
 
